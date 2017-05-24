@@ -21,7 +21,7 @@ public class PartitionEdges {
                 beginningPosition = bounds.getLastStart() + edgeWidth;
             }
         }
-        if (partitionIdx == readMetadata.getNPartitions() - 1) {
+        if ( partitionIdx == readMetadata.getNPartitions() - 1 ) {
             endingContigID = ReadMetadata.PartitionBounds.UNMAPPED;
             endingPosition = Integer.MAX_VALUE;
         } else {

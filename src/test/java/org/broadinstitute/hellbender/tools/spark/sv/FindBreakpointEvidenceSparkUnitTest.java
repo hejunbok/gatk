@@ -48,7 +48,7 @@ public final class FindBreakpointEvidenceSparkUnitTest extends BaseTest {
     @Test(groups = "spark")
     public void getIntervalsTest() {
         final List<SVInterval> actualIntervals =
-                FindBreakpointEvidenceSpark.getIntervals(params,broadcastMetadata,header,mappedReads,locations,null);
+                FindBreakpointEvidenceSpark.getIntervals(params,broadcastMetadata,header,mappedReads,locations);
         Assert.assertEquals(actualIntervals, expectedIntervalList);
     }
 

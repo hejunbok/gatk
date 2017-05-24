@@ -4,6 +4,7 @@ import com.esotericsoftware.kryo.DefaultSerializer;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.google.common.annotations.VisibleForTesting;
 import htsjdk.samtools.Cigar;
 import htsjdk.samtools.TextCigarCodec;
 import org.broadinstitute.hellbender.exceptions.GATKException;
@@ -124,6 +125,15 @@ public class BreakpointEvidence {
             if ( templateName == null ) throw new GATKException("Read has no name.");
             this.templateEnd = findTemplateEnd(read);
             this.validated = false;
+        }
+
+        @VisibleForTesting ReadEvidence( final SVInterval interval, final int weight,
+                                         final String templateName, final TemplateEnd templateEnd,
+                                         final boolean validated ) {
+            super(interval, weight);
+            this.templateName = templateName;
+            this.templateEnd = templateEnd;
+            this.validated = validated;
         }
 
         /**

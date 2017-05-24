@@ -1,5 +1,6 @@
 package org.broadinstitute.hellbender.tools.spark.sv;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.broadinstitute.hellbender.utils.Utils;
 
 import java.util.*;
@@ -72,15 +73,7 @@ public final class BreakpointDensityFilter implements Iterator<BreakpointEvidenc
         SVIntervalTree<List<BreakpointEvidence>> tree = new SVIntervalTree<>();
         while ( evidenceItr.hasNext() ) {
             final BreakpointEvidence evidence = evidenceItr.next();
-            final SVInterval location = evidence.getLocation();
-            final SVIntervalTree.Entry<List<BreakpointEvidence>> entry = tree.find(location);
-            if ( entry != null ) {
-                entry.getValue().add(evidence);
-            } else {
-                final List<BreakpointEvidence> valueList = new ArrayList<>(1);
-                valueList.add(evidence);
-                tree.put(location, valueList);
-            }
+            addToTree(tree, evidence.getLocation(), evidence);
         }
         return tree;
     }
@@ -94,7 +87,8 @@ public final class BreakpointDensityFilter implements Iterator<BreakpointEvidenc
         }
         return false;
     }
-    private boolean hasEnoughOverlappers( final SVInterval interval ) {
+
+    @VisibleForTesting boolean hasEnoughOverlappers( final SVInterval interval ) {
         final Iterator<SVIntervalTree.Entry<List<BreakpointEvidence>>> itr = evidenceTree.overlappers(interval);
         final SVIntervalTree<List<BreakpointEvidence>> targetIntervalTree = new SVIntervalTree<>();
         int weight = 0;
@@ -108,15 +102,7 @@ public final class BreakpointDensityFilter implements Iterator<BreakpointEvidenc
             for (final BreakpointEvidence evidence : evidenceForInterval) {
                 if (evidence.hasDistalTargets()) {
                     for (final SVInterval target : evidence.getDistalTargets(readMetadata)) {
-                        SVIntervalTree.Entry<List<BreakpointEvidence>> entry = targetIntervalTree.find(target);
-                        if ( entry != null ) {
-                            entry.getValue().add(evidence);
-                        } else {
-                            final List<BreakpointEvidence> valueList = new ArrayList<>(1);
-                            valueList.add(evidence);
-                            targetIntervalTree.put(target, valueList);
-                        }
-                        targetIntervalTree.find(target).getValue().add(evidence);
+                        addToTree(targetIntervalTree, target, evidence);
                     }
                 }
             }
@@ -134,5 +120,18 @@ public final class BreakpointDensityFilter implements Iterator<BreakpointEvidenc
             }
         }
         return false;
+    }
+
+    private static void addToTree( final SVIntervalTree<List<BreakpointEvidence>> tree,
+                                   final SVInterval interval,
+                                   final BreakpointEvidence evidence ) {
+        final SVIntervalTree.Entry<List<BreakpointEvidence>> entry = tree.find(interval);
+        if ( entry != null ) {
+            entry.getValue().add(evidence);
+        } else {
+            final List<BreakpointEvidence> valueList = new ArrayList<>(1);
+            valueList.add(evidence);
+            tree.put(interval, valueList);
+        }
     }
 }

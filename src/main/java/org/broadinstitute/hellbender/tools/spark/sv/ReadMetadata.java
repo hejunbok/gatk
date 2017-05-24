@@ -85,14 +85,14 @@ public class ReadMetadata {
 
     @VisibleForTesting
     ReadMetadata( final Set<Integer> crossContigIgnoreSet, final SAMFileHeader header,
-                  final LibraryFragmentStatistics stats,
+                  final LibraryFragmentStatistics stats, final PartitionBounds[] partitionBounds,
                   final long nReads, final long maxReadsInPartition, final int coverage ) {
         this.crossContigIgnoreSet = crossContigIgnoreSet;
         contigNameToID = buildContigNameToIDMap(header);
         this.nReads = nReads;
         this.maxReadsInPartition = maxReadsInPartition;
         this.coverage = coverage;
-        this.partitionBounds = new PartitionBounds[0];
+        this.partitionBounds = partitionBounds;
         readGroupToFragmentStatistics = new HashMap<>(SVUtils.hashMapCapacity(header.getReadGroups().size() + 1));
         readGroupToFragmentStatistics.put(null, stats);
         for ( final SAMReadGroupRecord readGroupRecord : header.getReadGroups() ) {

@@ -23,7 +23,7 @@ public class BreakpointEvidenceTest extends BaseTest {
         final String groupName = header.getReadGroups().get(0).getReadGroupId();
         final int readSize = 151;
         final ReadMetadata.LibraryFragmentStatistics groupStats = new ReadMetadata.LibraryFragmentStatistics(401, 175, 20);
-        final ReadMetadata readMetadata = new ReadMetadata(Collections.emptySet(), header, groupStats, 1L, 1L, 1);
+        final ReadMetadata readMetadata = new ReadMetadata(Collections.emptySet(), header, groupStats, null, 1L, 1L, 1);
         final String templateName = "xyzzy";
         final int readStart = 1010101;
         final GATKRead read = ArtificialReadUtils.createArtificialRead(header, templateName, 0, readStart, readSize);
@@ -52,7 +52,7 @@ public class BreakpointEvidenceTest extends BaseTest {
         final List<BreakpointEvidence> evidenceList = new ArrayList<>(7);
         final SAMFileHeader samHeader = ArtificialReadUtils.createArtificialSamHeader();
         final ReadMetadata.LibraryFragmentStatistics groupStatistics = new ReadMetadata.LibraryFragmentStatistics(400, 175, 20);
-        final ReadMetadata metadata = new ReadMetadata(Collections.emptySet(), samHeader, groupStatistics, 2L, 2L, 1);
+        final ReadMetadata metadata = new ReadMetadata(Collections.emptySet(), samHeader, groupStatistics, null, 2L, 2L, 1);
         final List<GATKRead> readPair = ArtificialReadUtils.createPair(samHeader, "firstReadPair", 101, 1010, 1382, false, false);
         final GATKRead read = readPair.get(0);
         evidenceList.add(new BreakpointEvidence.SplitRead(read, metadata, true));

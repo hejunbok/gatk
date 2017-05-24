@@ -24,7 +24,7 @@ public class ReadMetadataTest extends BaseTest {
         final ReadMetadata.LibraryFragmentStatistics statistics = new ReadMetadata.LibraryFragmentStatistics(400, 175, 20);
         final Set<Integer> crossContigIgnoreSet = new HashSet<>(3);
         crossContigIgnoreSet.add(1);
-        final ReadMetadata readMetadata = new ReadMetadata(crossContigIgnoreSet, header, statistics, 1L, 1L, 1);
+        final ReadMetadata readMetadata = new ReadMetadata(crossContigIgnoreSet, header, statistics, null, 1L, 1L, 1);
         Assert.assertEquals(readMetadata.getContigID(chr1Name), 0);
         Assert.assertEquals(readMetadata.getContigID(chr2Name), 1);
         Assert.assertFalse(readMetadata.ignoreCrossContigID(0));
@@ -40,7 +40,7 @@ public class ReadMetadataTest extends BaseTest {
         final ReadMetadata.LibraryFragmentStatistics statistics = new ReadMetadata.LibraryFragmentStatistics(400, 175, 20);
         final Set<Integer> crossContigIgnoreSet = new HashSet<>(3);
         crossContigIgnoreSet.add(0);
-        final ReadMetadata readMetadata = new ReadMetadata(crossContigIgnoreSet, header, statistics, 1L, 1L, 1);
+        final ReadMetadata readMetadata = new ReadMetadata(crossContigIgnoreSet, header, statistics, null, 1L, 1L, 1);
 
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
         final Output out = new Output(bos);
